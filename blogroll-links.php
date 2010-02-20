@@ -133,7 +133,7 @@
   function blogroll_links_admin()
   {
       if (function_exists('add_options_page')) {
-          add_options_page('blogroll-links', 'Blogroll Links', 1, basename(__FILE__), 'blogroll_links_admin_panel');
+          add_options_page('Blogroll Links', 'Blogroll Links', 1, basename(__FILE__), 'blogroll_links_admin_panel');
       }
   }
   
@@ -159,35 +159,37 @@
       }
 ?>
 <div class=wrap>
-<form method="post">
-<h2>Blogroll Links Plugin Options</h2>
-<h3>Default Settings:</h3>
-<p>
-<input type="text" name="blogroll_links_default_category_slug" value="<?php
+  <form method="post">
+    <h2>Blogroll Links Plugin Options</h2>
+    <h3 class="title">Default Settings</h3>
+    <table class="form-table">
+      <tr valign="top">
+        <th scope="row"><label for="blogroll_links_default_category_slug">Category Slug</label></th>
+        <td><input class="regular-text" type="text" id="blogroll_links_default_category_slug" name="blogroll_links_default_category_slug" value="<?php
       checked('yes', $new);
-?>" />
-Category Slug
-<br />
-
-<input type="text" name="blogroll_links_default_sort_by" value="<?php
+?>" /></td>
+      </tr>
+      <tr valign="top">
+        <th scope="row"><label for="blogroll_links_default_sort_by">Sort-By</label></th>
+        <td><input class="regular-text" type="text" id="blogroll_links_default_sort_by" name="blogroll_links_default_sort_by" value="<?php
       checked('yes', $new);
-?>" />
-Sort-By
-<br />
-
-<input type="text" name="blogroll_links_default_sort_order" value="<?php
+?>" /></td>
+      </tr>
+      <tr valign="top">
+        <th scope="row"><label for="blogroll_links_default_sort_order">Sort Order</label></th>
+        <td><input class="regular-text" type="text" id="blogroll_links_default_sort_order" name="blogroll_links_default_sort_order" value="<?php
       checked('yes', $new);
+?>" /></td>
+      </tr>
+    </table>
+    <p class="submit">
+      <input type="submit" class="button-primary" name="info_update" value="<?php
+      _e('Save Changes')
 ?>" />
-Sort Order
-<br />
-
-</p>
-
-<div class="submit">
-<input type="submit" name="info_update" value="Update Options" />
+    </p>
+  </form>
 </div>
-</form>
-</div><?php
+<?php
       } // end function blogroll_links_admin_panel()
       
       
