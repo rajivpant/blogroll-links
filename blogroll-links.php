@@ -2,9 +2,9 @@
   /*
    Plugin Name: Blogroll Links
    Plugin URI: http://www.rajiv.com/blog/2008/02/10/blogroll-links/
-   Description: Displays blogroll links on a Page or Post. Insert <code>&lt;!--blogroll-links category-slug="blogroll"--&gt;&lt;!--/blogroll-links--&gt;</code> to a Page or Post and it will display your blogroll links there.
+   Description: Displays blogroll links on a Page or Post. Insert <code>[blogroll-links category-slug="blogroll"]</code> to a Page or Post and it will display your blogroll links there.
    Author: Rajiv Pant
-   Version: 1.1
+   Version: 2.0
    Author URI: http://www.rajiv.com/
    */
   
@@ -34,14 +34,93 @@
       
    Examples of use:
    
+   New WordPress shortcode format:
+   
+   [blogroll-links categoryslug="rajiv-web" sortby="link_title"]
+   [blogroll-links categoryslug="people" sortby="link_title" sortorder="desc"]
+
+   Old format (now deprecated) from version 1.0 and 1.1:
+   
    <!--blogroll-links category-slug="rajiv-web" sort-by="link_title"><!--/blogroll-links-->
    <!--blogroll-links category-slug="people" sort-by="link_title" sort-order="desc"--><!--/blogroll-links-->
    
    */
+
+
+
+  function blogroll_links_handler($atts) {
+  
+//    $attributes = ''; // for debugging
+//    foreach ($atts as $key=>$value) { // for debugging
+//        $attributes .= "$key: $value\n"; // for debugging
+//   } // for debugging
+//    return "Attributes: $attributes<br/>Content: $content"; // for debugging
+
+  
+    global $wpdb, $table_prefix;
+      
+    $attributes = shortcode_atts(array(
+        'categoryslug' => get_option('blogroll_links_default_category_slug'),
+        'sortby' => get_option('blogroll_links_default_sort_by'),
+        'sortorder' => get_option('blogroll_links_default_sort_order'),
+    ), $atts);
+
+
+	$category_slug = $attributes['categoryslug'];
+    $sort_by       = $attributes['sortby'];
+    $sort_order    = $attributes['sortorder'];
+
+          /*
+           
+           Sample SQL Query:
+           SELECT *
+           FROM wp_links, wp_term_relationships
+           WHERE link_id = object_id
+           AND link_visible = 'Y'
+           AND term_taxonomy_id = (
+           SELECT wp_term_taxonomy.term_taxonomy_id
+           FROM wp_term_taxonomy
+           WHERE term_id = (SELECT DISTINCT term_id
+           FROM wp_terms, wp_term_relationships
+           WHERE slug = 'charity'
+           AND taxonomy = 'link_category'))
+           ORDER BY link_name
+           
+           */
+          
+          $sql = "SELECT * " . "FROM $wpdb->links, " . $table_prefix . "term_relationships " . "WHERE link_id = object_id " . "AND link_visible='Y' " . // Skip links marked as not to be visible
+          "AND term_taxonomy_id = ( " . "SELECT " . $table_prefix . "term_taxonomy.term_taxonomy_id " . "FROM " . $table_prefix . "term_taxonomy " . "WHERE term_id = (SELECT DISTINCT term_id " . "FROM " . $table_prefix . "terms, " . $table_prefix . "term_relationships " . "WHERE slug = '" . $category_slug . "' " . "AND taxonomy = 'link_category')) " . "ORDER BY " . $sort_by;
+          
+          // $links .= "category-slug=". $category_slug . "\n<br />"; // for debugging
+          // $links .= "sort-order=". $sort_order . "\n<br />"; // for debugging
+          // $links .= "sort-by=". $sort_by . "\n<br />"; // for debugging
+          // $links .= "sql=". $sql . "\n<br />"; // for debugging
+          
+          $alllinks = $wpdb->get_results($sql);
+          
+          $links .= '<ul>';
+          
+          foreach ($alllinks as $link) {
+              $url = $link->link_url;
+              $name = $link->link_name;
+              $description = (strlen($link->link_description) > 0) ? ' - ' . $link->link_description : '';
+              $rel = (strlen($link->link_rel) > 0) ? ' rel="' . $link->link_rel . '"' : '';
+              $image = (strlen($link->link_image) > 0) ? '<br />' . '<img src="' . $link->link_image . '" border="0"/>' : '';
+              $target = (strlen($link->link_target) > 0) ? ' target="' . $link->link_target . '"' : '';
+              $links .= '<li><a href="' . $url . '"' . $rel . $target . '>' . $name . '</a>' . $description . $image . '</li>';
+          }
+          
+          $links .= '</ul>';
+                
+      return $links;
+
+  }
+
+
   
   
   // Replaces the <!--blogroll-links--> tag and its contents with the blogroll links
-  
+  // This function supports a previous (now deprecated) syntax
   function blogroll_links_text($text)
   {
       global $wpdb, $table_prefix;
@@ -197,5 +276,6 @@
       
       // hooks
       add_filter('the_content', 'blogroll_links_text', 2);
+      add_shortcode('blogroll-links', 'blogroll_links_handler');
       add_action('admin_menu', 'blogroll_links_admin');
 ?>
