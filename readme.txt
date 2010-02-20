@@ -3,8 +3,8 @@ Contributors: rajivpant
 Donate link: http://www.rajiv.com/contact/
 Tags: links, blogroll
 Requires at least: 2.0.2
-Tested up to: 2.5
-Stable tag: trunk
+Tested up to: 2.9.2
+Stable tag: tags/1.1
 
 Blogroll Links displays a list of URL links and related info in a Post or Page on your Wordpress Blog. It is often used for tagged, social links.
 
