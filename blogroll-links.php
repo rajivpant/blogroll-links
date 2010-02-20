@@ -4,7 +4,7 @@
    Plugin URI: http://www.rajiv.com/blog/2008/02/10/blogroll-links/
    Description: Displays blogroll links on a Page or Post. Insert <code>&lt;!--blogroll-links category-slug="blogroll"--&gt;&lt;!--/blogroll-links--&gt;</code> to a Page or Post and it will display your blogroll links there.
    Author: Rajiv Pant
-   Version: 1.0
+   Version: 1.1
    Author URI: http://www.rajiv.com/
    */
   
@@ -13,7 +13,10 @@
    Blogroll Links is a Wordpress Plugin that displays a list of blogroll links
    in a Post or Page on your Wordpress Blog.
    
-   Copyright (C) 2008 Rajiv Pant
+   Version 1.1 includes modifications made to the admin panel layout to make it
+   better compliant with the WordPress guidelines. Thanks to @federicobond.
+
+   Copyright (C) 2008-2010 Rajiv Pant
    
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -28,8 +31,7 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-   
-   
+      
    Examples of use:
    
    <!--blogroll-links category-slug="rajiv-web" sort-by="link_title"><!--/blogroll-links-->
