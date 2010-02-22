@@ -2,9 +2,9 @@
   /*
    Plugin Name: Blogroll Links
    Plugin URI: http://www.rajiv.com/blog/2008/02/10/blogroll-links/
-   Description: Displays blogroll links on a Page or Post. Insert <code>[blogroll-links category-slug="blogroll"]</code> to a Page or Post and it will display your blogroll links there.
+   Description: Displays blogroll links on a Page or Post. Insert <code>[blogroll-links categoryslug="blogroll"]</code> to a Page or Post and it will display your blogroll links there.
    Author: Rajiv Pant
-   Version: 2.0
+   Version: 2.1
    Author URI: http://www.rajiv.com/
    */
   
@@ -15,6 +15,9 @@
    
    Version 1.1 includes modifications made to the admin panel layout to make it
    better compliant with the WordPress guidelines. Thanks to @federicobond.
+   
+   Version 2 switches over the tag format to WordPress shortcodes.
+   The old format is still supported for backwards compatibility.
 
    Copyright (C) 2008-2010 Rajiv Pant
    
@@ -61,14 +64,16 @@
       
     $attributes = shortcode_atts(array(
         'categoryslug' => get_option('blogroll_links_default_category_slug'),
-        'sortby' => get_option('blogroll_links_default_sort_by'),
-        'sortorder' => get_option('blogroll_links_default_sort_order'),
+        'sortby'       => get_option('blogroll_links_default_sort_by'),
+        'sortorder'    => get_option('blogroll_links_default_sort_order'),
+        'debug'        => '0',
     ), $atts);
 
 
 	$category_slug = $attributes['categoryslug'];
     $sort_by       = $attributes['sortby'];
     $sort_order    = $attributes['sortorder'];
+    $debug         = $attributes['debug'];
 
           /*
            
@@ -88,13 +93,22 @@
            
            */
           
-          $sql = "SELECT * " . "FROM $wpdb->links, " . $table_prefix . "term_relationships " . "WHERE link_id = object_id " . "AND link_visible='Y' " . // Skip links marked as not to be visible
-          "AND term_taxonomy_id = ( " . "SELECT " . $table_prefix . "term_taxonomy.term_taxonomy_id " . "FROM " . $table_prefix . "term_taxonomy " . "WHERE term_id = (SELECT DISTINCT term_id " . "FROM " . $table_prefix . "terms, " . $table_prefix . "term_relationships " . "WHERE slug = '" . $category_slug . "' " . "AND taxonomy = 'link_category')) " . "ORDER BY " . $sort_by;
+          $sort_by_str = (strlen($sort_by) > 0) ? "ORDER BY " . $sort_by : '';
           
-          // $links .= "category-slug=". $category_slug . "\n<br />"; // for debugging
-          // $links .= "sort-order=". $sort_order . "\n<br />"; // for debugging
-          // $links .= "sort-by=". $sort_by . "\n<br />"; // for debugging
-          // $links .= "sql=". $sql . "\n<br />"; // for debugging
+          $sql = "SELECT * " . "FROM $wpdb->links, " . $table_prefix . "term_relationships " .
+          "WHERE link_id = object_id " . "AND link_visible='Y' " . // Skip links marked as not to be visible
+          "AND term_taxonomy_id = ( " . "SELECT " . $table_prefix . "term_taxonomy.term_taxonomy_id " .
+          "FROM " . $table_prefix . "term_taxonomy " . "WHERE term_id = (SELECT DISTINCT term_id " .
+          "FROM " . $table_prefix . "terms, " . $table_prefix . "term_relationships " .
+          "WHERE slug = '" . $category_slug . "' " . "AND taxonomy = 'link_category')) " .
+          $sort_by_str;
+
+          if ($debug == 1) {
+			  $links .= "category-slug=". $category_slug . "\n<br />";
+			  $links .= "sort-order=". $sort_order . "\n<br />";
+			  $links .= "sort-by=". $sort_by . "\n<br />";
+			  $links .= "sql=". $sql . "\n<br />";
+          }
           
           $alllinks = $wpdb->get_results($sql);
           
@@ -113,7 +127,6 @@
           $links .= '</ul>';
                 
       return $links;
-
   }
 
 
