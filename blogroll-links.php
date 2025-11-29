@@ -29,6 +29,9 @@
  *
  * Version 3.0 modernizes the plugin for WordPress 6.x and PHP 8+, fixing
  * security vulnerabilities and following current coding standards.
+ * Modernized using Synthesis Coding with Claude Code - a human-AI
+ * collaborative development approach.
+ * @see https://rajiv.com/blog/2025/11/09/synthesis-engineering-with-claude-code-technical-implementation-and-workflows/
  *
  * Copyright (C) 2008-2025 Rajiv Pant
  * Thanks to Dave Grega, Adam E. Falk (xenograg) for their contributions to this code.

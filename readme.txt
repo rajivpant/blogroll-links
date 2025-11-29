@@ -67,6 +67,8 @@ See this plugin in action:
 
 Thanks to Dave Grega and Adam E. Falk (xenograg) for their contributions to this code.
 
+Version 3.0 was modernized using [Synthesis Coding](https://rajiv.com/blog/2025/11/09/synthesis-engineering-with-claude-code-technical-implementation-and-workflows/) with Claude Code - a human-AI collaborative development approach.
+
 == Installation ==
 
 1. Upload the `blogroll-links` folder to `/wp-content/plugins/`
