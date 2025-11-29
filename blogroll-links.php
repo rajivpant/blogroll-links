@@ -30,7 +30,7 @@
  * Version 3.0 modernizes the plugin for WordPress 6.x and PHP 8+, fixing
  * security vulnerabilities and following current coding standards.
  *
- * Copyright (C) 2008-2024 Rajiv Pant
+ * Copyright (C) 2008-2025 Rajiv Pant
  * Thanks to Dave Grega, Adam E. Falk (xenograg) for their contributions to this code.
  *
  * This program is free software; you can redistribute it and/or
