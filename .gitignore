@@ -1,0 +1,31 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# wp-env
+/.wp-env.json.lock
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+debug.log
+
+# Build artifacts
+/build/
+/dist/
+
+# Composer
+composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
